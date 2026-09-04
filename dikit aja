@@ -1,0 +1,103 @@
+-- Cek apakah PlayerGui sudah siap
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Hapus loading screen lama jika ada
+if playerGui:FindFirstChild("CipikBanIntro") then
+    playerGui.CipikBanIntro:Destroy()
+end
+
+-- Buat ScreenGui utama
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "CipikBanIntro"
+screenGui.IgnoreGuiInset = true
+screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
+
+-- Buat Background Hitam Pekat
+local background = Instance.new("Frame")
+background.Size = UDim2.new(1, 0, 1, 0)
+background.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+background.BorderSizePixel = 0
+background.Parent = screenGui
+
+-- Bingkai / Garis Merah di Pinggir Layar (Aura Peringatan)
+local border = Instance.new("UIStroke")
+border.Color = Color3.fromRGB(255, 0, 0)
+border.Thickness = 8
+border.Parent = background
+
+-- Container untuk teks agar rapi
+local textContainer = Instance.new("Frame")
+textContainer.Size = UDim2.new(0.8, 0, 0.4, 0)
+textContainer.Position = UDim2.new(0.5, 0, 0.45, 0)
+textContainer.AnchorPoint = Vector2.new(0.5, 0.5)
+textContainer.BackgroundTransparency = 1
+textContainer.Parent = background
+
+-- TextLabel Utama
+local textLabel = Instance.new("TextLabel")
+textLabel.Size = UDim2.new(1, 0, 1, 0)
+textLabel.BackgroundTransparency = 1
+textLabel.Font = Enum.Font.GothamBold -- Font tegas ala sistem
+textLabel.Text = "" -- Dikosongkan dulu untuk efek ketik
+textLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Warna Merah
+textLabel.TextScaled = true
+textLabel.TextWrapped = true
+textLabel.Parent = textContainer
+
+-- Tambahan Efek Bayangan Teks (DropShadow) agar terbaca jelas
+local shadow = Instance.new("UIStroke")
+shadow.Color = Color3.fromRGB(80, 0, 0)
+shadow.Thickness = 3
+shadow.Parent = textLabel
+
+-- Loading Bar (Bar Kemajuan di Bawah)
+local barBackground = Instance.new("Frame")
+barBackground.Size = UDim2.new(0.5, 0, 0.03, 0)
+barBackground.Position = UDim2.new(0.5, 0, 0.75, 0)
+barBackground.AnchorPoint = Vector2.new(0.5, 0.5)
+barBackground.BackgroundColor3 = Color3.fromRGB(40, 0, 0)
+barBackground.BorderSizePixel = 0
+barBackground.Parent = background
+
+local barCorner = Instance.new("UICorner")
+barCorner.CornerRadius = UDim.new(1, 0)
+barCorner.Parent = barBackground
+
+local progressBar = Instance.new("Frame")
+progressBar.Size = UDim2.new(0, 0, 1, 0)
+progressBar.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+progressBar.BorderSizePixel = 0
+progressBar.Parent = barBackground
+
+local progressCorner = Instance.new("UICorner")
+progressCorner.CornerRadius = UDim.new(1, 0)
+progressCorner.Parent = progressBar
+
+-- Efek Ketik (Typing Effect) untuk Teks
+local fullText = "SELAMAT AKUN ANDA DI BAN !\ncipik ban"
+task.spawn(function()
+    for i = 1, #fullText do
+        textLabel.Text = string.sub(fullText, 1, i)
+        task.wait(0.06) -- Kecepatan ketik disesuaikan untuk durasi 10 detik
+    end
+end)
+
+-- Animasi Bar Loading berjalan penuh selama 10 detik
+local tweenService = game:GetService("TweenService")
+local tweenInfo = TweenInfo.new(10, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+local tween = tweenService:Create(progressBar, tweenInfo, {Size = UDim2.new(1, 0, 1, 0)})
+tween:Play()
+
+-- Tunggu total 10 detik
+task.wait(10)
+
+-- Hapus intro sebelum masuk ke script utama
+screenGui:Destroy()
+
+--------------------------------------------------
+-- SCRIPT UTAMA KAMU (OTOMATIS DIEKSEKUSI)
+--------------------------------------------------
+loadstring(game:HttpGet("https://pastefy.app/C8sgtDYB/raw"))()
